@@ -3,6 +3,8 @@ const Schema = mongoose.Schema
 
 const bcrypt = require('bcrypt')
 
+const validator = require('validator')
+
 const userModel = Schema({
     email : {
         type : String,
@@ -17,6 +19,18 @@ const userModel = Schema({
 
 userModel.statics.signUp = async function(email, password){
 
+    if(!email || !password){
+        throw Error('veuillez remplir tous les champs')
+    }
+
+    if(!validator.isEmail(email)){
+        throw Error('Email non valide')
+    }
+
+    if(!validator.isStrongPassword(password)){
+        throw Error("Mot de passe non valide")
+    }
+
     const exists = await this.findOne({ email })
 
     if(exists){
@@ -29,6 +43,31 @@ userModel.statics.signUp = async function(email, password){
     // const user = await this.create({ email, password : hash })
 
     const user = await this.create({ email, password })
+
+    return user
+}
+
+userModel.statics.login = async function(email, password){
+
+    if(!email || !password){
+        throw Error('Veuillez remplir tous les champs')
+    }
+
+    const user = await this.findOne({ email })
+
+    if(!user){
+        throw Error('email incorrect')
+    }
+
+    // const match = await bcrypt.compare(password, user.password)
+
+    // if(!match){
+    //     throw Error('Mot de passe incorrect')
+    // }
+
+    if(password != user.password){
+        throw Error('Mot de passe incorrect')
+    }
 
     return user
 }
