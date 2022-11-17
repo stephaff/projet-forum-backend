@@ -34,6 +34,7 @@ const userSignUp = async(req, res) => {
     } catch (error) {
         res.status(400).json({ error : error.message })
     }
+
 }
 
 module.exports = { userLogin, userSignUp }

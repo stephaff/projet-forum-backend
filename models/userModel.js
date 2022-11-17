@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 
 const validator = require('validator')
 
-const userModel = Schema({
+const userSchema = Schema({
     email : {
         type : String,
         required : true,
@@ -17,7 +17,7 @@ const userModel = Schema({
     }
 })
 
-userModel.statics.signUp = async function(email, password){
+userSchema.statics.signUp = async function(email, password){
 
     if(!email || !password){
         throw Error('veuillez remplir tous les champs')
@@ -47,7 +47,7 @@ userModel.statics.signUp = async function(email, password){
     return user
 }
 
-userModel.statics.login = async function(email, password){
+userSchema.statics.login = async function(email, password){
 
     if(!email || !password){
         throw Error('Veuillez remplir tous les champs')
@@ -72,4 +72,4 @@ userModel.statics.login = async function(email, password){
     return user
 }
 
-module.exports = mongoose.model('User', userModel)
+module.exports = mongoose.model('User', userSchema)
